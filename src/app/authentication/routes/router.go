@@ -7,5 +7,5 @@ import (
 )
 
 func InitializeRoutes(router *gin.Engine) {
-	router.POST("/Sign", handlers.SignUpHandler)
+	router.POST("/Signup", handlers.SignUpHandler)
 }
