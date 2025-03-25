@@ -37,7 +37,7 @@ cd stock_broker_application
 ```
 
 ### 🔹 Configure Environment Variables
-Modify `config.yaml` (or `.env` if used) to set up database credentials:
+Modify `config.yaml`  to set up database credentials:
 
 ```yaml
 database:
@@ -65,7 +65,7 @@ go run main.go
 
 ### 🔹 User Signup
 
-#### 📌 POST `/Sign`
+#### 📌 POST `/Signup`
 Registers a new user with validation checks.
 
 #### 🔹 Request Body
@@ -119,7 +119,7 @@ You can test the API using **Postman** or **cURL**.
 
 1. Open Postman.
 2. Select a **POST** request.
-3. Enter the URL: `http://localhost:8080/Sign`
+3. Enter the URL: `http://localhost:8080/Signup`
 4. Go to **Body → raw → JSON**.
 5. Paste the following:
 
@@ -148,7 +148,7 @@ You can test the API using **Postman** or **cURL**.
 ✅ **Successful Request**
 
 ```sh
-curl -X POST "http://localhost:8080/Sign" \
+curl -X POST "http://localhost:8080/Signup" \
 -H "Content-Type: application/json" \
 -d '{
   "name": "Test User",
@@ -163,7 +163,7 @@ curl -X POST "http://localhost:8080/Sign" \
 ❌ **Error Case (Missing Password)**
 
 ```sh
-curl -X POST "http://localhost:8080/Sign" \
+curl -X POST "http://localhost:8080/Signup" \
 -H "Content-Type: application/json" \
 -d '{
   "name": "Test User",
