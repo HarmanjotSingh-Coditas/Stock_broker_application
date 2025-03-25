@@ -34,37 +34,43 @@ A backend service for user authentication and management in a stock broker platf
 ```sh
 git clone https://github.com/HarmanjotSingh-Coditas/stock_broker_application.git
 cd stock_broker_application
-🔹 Configure Environment Variables
-Modify config.yaml (or .env if used) to set up database credentials:
+```
 
-yaml
-Copy
-Edit
+### 🔹 Configure Environment Variables
+Modify `config.yaml` (or `.env` if used) to set up database credentials:
+
+```yaml
 database:
   host: "localhost"
   port: 5432
   user: "your_user"
   password: "your_password"
   dbname: "stock_broker_db"
-🔹 Run Migrations
-Migrations are automatically handled in sqlSetup.go, so just run the main file.
+```
 
-🔹 Start the Server
-sh
-Copy
-Edit
+### 🔹 Run Migrations
+Migrations are automatically handled in `sqlSetup.go`, so just run the main file.
+
+### 🔹 Start the Server
+
+```sh
 go run main.go
-✅ The server will start on localhost:8080
+```
 
-📡 API Endpoints
-🔹 User Signup
-📌 POST /Sign
+✅ The server will start on `localhost:8080`
+
+---
+
+## 📡 API Endpoints
+
+### 🔹 User Signup
+
+#### 📌 POST `/Sign`
 Registers a new user with validation checks.
 
-🔹 Request Body
-json
-Copy
-Edit
+#### 🔹 Request Body
+
+```json
 {
   "name": "John Doe",
   "password": "Strong@123",
@@ -73,53 +79,51 @@ Edit
   "phoneno": 9876543210,
   "pan": "ABCDE1234F"
 }
-🔹 Response
-json
-Copy
-Edit
+```
+
+#### 🔹 Response
+
+```json
 {
   "message": "User created successfully"
 }
-❌ Error Handling
+```
+
+### ❌ Error Handling
 The application provides detailed validation errors. Example:
 
-json
-Copy
-Edit
+```json
 {
   "errors": [
     "email is required",
     "password must be at least 8 characters"
   ]
 }
-⚠ Additional Notes
-The application uses hashed passwords for security.
+```
 
-Duplicate username/email results in a conflict error.
+---
 
-Phone numbers are stored as BIGINT to avoid string conversion issues.
+## ⚠ Additional Notes
 
-🧪 Running Tests
-You can test the API using Postman or cURL.
+- The application uses hashed passwords for security.
+- Duplicate username/email results in a conflict error.
+- Phone numbers are stored as `BIGINT` to avoid string conversion issues.
 
-🔹 Test with Postman
-Open Postman.
+---
 
-Select a POST request.
+## 🧪 Running Tests
 
-Enter the URL:
+You can test the API using **Postman** or **cURL**.
 
-arduino
-Copy
-Edit
-http://localhost:8080/Sign
-Go to Body → raw → JSON.
+### 🔹 Test with Postman
 
-Paste the following:
+1. Open Postman.
+2. Select a **POST** request.
+3. Enter the URL: `http://localhost:8080/Sign`
+4. Go to **Body → raw → JSON**.
+5. Paste the following:
 
-json
-Copy
-Edit
+```json
 {
   "name": "Test User",
   "password": "Test@1234",
@@ -128,21 +132,22 @@ Edit
   "phoneno": 9876543211,
   "pan": "XYZAB5678L"
 }
-Click Send.
+```
 
-You should receive:
+6. Click **Send**.
+7. You should receive:
 
-json
-Copy
-Edit
+```json
 {
   "message": "User created successfully"
 }
-🔹 Test with cURL
-✅ Successful Request
-sh
-Copy
-Edit
+```
+
+### 🔹 Test with cURL
+
+✅ **Successful Request**
+
+```sh
 curl -X POST "http://localhost:8080/Sign" \
 -H "Content-Type: application/json" \
 -d '{
@@ -153,10 +158,11 @@ curl -X POST "http://localhost:8080/Sign" \
   "phoneno": 9876543211,
   "pan": "XYZAB5678L"
 }'
-❌ Error Case (Missing Password)
-sh
-Copy
-Edit
+```
+
+❌ **Error Case (Missing Password)**
+
+```sh
 curl -X POST "http://localhost:8080/Sign" \
 -H "Content-Type: application/json" \
 -d '{
@@ -165,14 +171,16 @@ curl -X POST "http://localhost:8080/Sign" \
   "phoneno": 9876543211,
   "pan": "XYZAB5678L"
 }'
-📌 Response:
+```
 
-json
-Copy
-Edit
+📌 **Response:**
+
+```json
 {
   "errors": [
     "password is required",
     "confirmpassword is required"
   ]
 }
+```
+
