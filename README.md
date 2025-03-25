@@ -184,3 +184,6 @@ curl -X POST "http://localhost:8080/Signup" \
 }
 ```
 
+![image](https://github.com/user-attachments/assets/0a8779c2-ef42-4592-95d2-b8dab1af544b)
+
+
