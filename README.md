@@ -45,7 +45,7 @@ database:
   port: 5432
   user: "your_user"
   password: "your_password"
-  dbname: "stock_broker_db"
+  dbname: "postgres"
 ```
 
 ### 🔹 Run Migrations
