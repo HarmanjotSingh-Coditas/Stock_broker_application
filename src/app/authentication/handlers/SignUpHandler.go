@@ -12,71 +12,100 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-func SignUpHandler(c *gin.Context) {
+type SignUpController struct {
+	service *business.SignUpService
+}
+
+func NewSignUpController(service *business.SignUpService) *SignUpController {
+	return &SignUpController{service: service}
+}
+func (controller *SignUpController) SignUpHandler(c *gin.Context) {
 	var bffCreateUserRequest models.BFFUserRequest
 
 	if err := c.ShouldBindJSON(&bffCreateUserRequest); err != nil {
-		var validationErrors []string
+		var validationErrors []map[string]string
 
 		if errs, ok := err.(validator.ValidationErrors); ok {
 			for _, fieldErr := range errs {
 				field, _ := reflect.TypeOf(bffCreateUserRequest).FieldByName(fieldErr.StructField())
 				jsonTag := field.Tag.Get("json")
 
-				validationErrors = append(validationErrors, jsonTag+" is required")
+				errorMsg, exists := constants.ErrFieldRequired[jsonTag]
+				if !exists {
+					errorMsg = "This field is required"
+				}
+
+				validationErrors = append(validationErrors, map[string]string{
+					"key":   jsonTag,
+					"error": errorMsg,
+				})
 			}
 		} else {
-			validationErrors = append(validationErrors, constants.ErrInvalidRequestBody)
+			validationErrors = append(validationErrors, map[string]string{
+				"key":   "request",
+				"error": constants.ErrInvalidRequestBody,
+			})
 		}
 
 		c.JSON(http.StatusBadRequest, gin.H{"errors": validationErrors})
 		return
 	}
+
+	// Custom validation errors
+	var validationErrors []map[string]string
+
 	if bffCreateUserRequest.Password != bffCreateUserRequest.ConfirmPassword {
-		c.JSON(http.StatusBadRequest, models.ErrorResponse{
-			Error: constants.ErrPasswordMismatch,
+		validationErrors = append(validationErrors, map[string]string{
+			"key":   "confirmpassword",
+			"error": constants.ErrPasswordMismatch,
 		})
-		return
 	}
 
 	if !validators.ValidatePAN(bffCreateUserRequest.PANNumber) {
-		c.JSON(http.StatusBadRequest, models.ErrorResponse{
-			Error: constants.ErrInvalidPAN,
+		validationErrors = append(validationErrors, map[string]string{
+			"key":   "pan",
+			"error": constants.ErrInvalidPAN,
 		})
-		return
 	}
-	if !validators.ValidatePhone(bffCreateUserRequest.PhoneNumber) {
-		c.JSON(http.StatusBadRequest, models.ErrorResponse{
-			Error: constants.ErrInvalidPhone,
-		})
-		return
-	}
+
 	if !validators.ValidateEmail(bffCreateUserRequest.EmailId) {
-		c.JSON(http.StatusBadRequest, models.ErrorResponse{
-			Error: constants.ErrInvalidEmail,
+		validationErrors = append(validationErrors, map[string]string{
+			"key":   "email",
+			"error": constants.ErrInvalidEmail,
 		})
-		return
 	}
+
 	if !validators.ValidatePassword(bffCreateUserRequest.Password) {
-		c.JSON(http.StatusBadRequest, models.ErrorResponse{
-			Error: constants.ErrInvalidPassword,
+		validationErrors = append(validationErrors, map[string]string{
+			"key":   "password",
+			"error": constants.ErrInvalidPassword,
 		})
+	}
+
+	if !validators.ValidatePhoneNumber(bffCreateUserRequest.PhoneNumber) {
+		validationErrors = append(validationErrors, map[string]string{
+			"key":   "phoneno",
+			"error": constants.ErrInvalidPhone,
+		})
+	}
+
+	if len(validationErrors) > 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"errors": validationErrors})
 		return
 	}
 
-	message, err := business.SignUpService(bffCreateUserRequest)
+	// Call the SignUpService method
+	message, err := controller.service.SignUpUser(bffCreateUserRequest)
 	if err != nil {
 		if err.Error() == constants.ErrUserExists {
-			c.JSON(http.StatusConflict, models.ErrorResponse{
-				Error: constants.ErrUserExists,
-			})
+			c.JSON(http.StatusConflict, gin.H{"errors": []map[string]string{
+				{"key": "email", "error": constants.ErrUserExists},
+			}})
 			return
 		}
-		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, models.BFFUserResponse{
-		Message: message,
-	})
+	c.JSON(http.StatusOK, models.BFFUserResponse{Message: message})
 }

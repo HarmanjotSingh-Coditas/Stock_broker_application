@@ -11,7 +11,7 @@ func ValidatePAN(pan string) bool {
 	return PANRegex.MatchString(pan)
 }
 
-func ValidatePhone(phone uint64) bool {
+func ValidatePhoneNumber(phone uint64) bool {
 	return phone >= 1000000000 && phone <= 9999999999
 }
 

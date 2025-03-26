@@ -3,14 +3,22 @@ package business
 import (
 	"authentication/constants"
 	"authentication/models"
-	"authentication/repo"
+	"authentication/repository"
 	"errors"
-	dbmodels "stock_broker_application/models"
+	dbmodels "stock_broker_application/src/models"
 	"stock_broker_application/src/utils"
 )
 
-func SignUpService(bffCreateUserRequest models.BFFUserRequest) (string, error) {
-	exists, err := repo.CheckUserExists(bffCreateUserRequest.EmailId, bffCreateUserRequest.UserName)
+type SignUpService struct {
+	userRepo *repository.UserSignUpRepository
+}
+
+func NewSignUpService(userRepo *repository.UserSignUpRepository) *SignUpService {
+	return &SignUpService{userRepo: userRepo}
+}
+
+func (service *SignUpService) SignUpUser(bffCreateUserRequest models.BFFUserRequest) (string, error) {
+	exists, err := service.userRepo.CheckUserExists(bffCreateUserRequest.EmailId, bffCreateUserRequest.UserName, bffCreateUserRequest.PANNumber)
 	if err != nil {
 		return "", err
 	}
@@ -31,7 +39,7 @@ func SignUpService(bffCreateUserRequest models.BFFUserRequest) (string, error) {
 		Password:    hashedPassword,
 	}
 
-	err = repo.CreateUser(newUser)
+	err = service.userRepo.CreateUser(newUser)
 	if err != nil {
 		return "", err
 	}
