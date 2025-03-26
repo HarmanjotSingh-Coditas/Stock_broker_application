@@ -17,8 +17,8 @@ func NewUserSignUpRepository(db *gorm.DB) *UserSignUpRepository {
 }
 
 func (repo *UserSignUpRepository) CheckUserExists(email, username , pan string) (bool, error) {
-	var user dbmodels.User
-	err := repo.DB.Where("email = ? OR username = ? OR PAN = ?", email, username , pan).First(&user).Error
+	var bffUserSignUpRequest dbmodels.User
+	err := repo.DB.Where("email = ? OR username = ? OR PAN = ?", email, username , pan).First(&bffUserSignUpRequest).Error
 
 	if err == nil {
 		return true, errors.New(constants.ErrUserExists)

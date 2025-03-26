@@ -51,7 +51,6 @@ func (controller *SignUpController) SignUpHandler(c *gin.Context) {
 		return
 	}
 
-	// Custom validation errors
 	var validationErrors []map[string]string
 
 	if bffCreateUserRequest.Password != bffCreateUserRequest.ConfirmPassword {
@@ -94,7 +93,6 @@ func (controller *SignUpController) SignUpHandler(c *gin.Context) {
 		return
 	}
 
-	// Call the SignUpService method
 	message, err := controller.service.SignUpUser(bffCreateUserRequest)
 	if err != nil {
 		if err.Error() == constants.ErrUserExists {
@@ -106,6 +104,5 @@ func (controller *SignUpController) SignUpHandler(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-
 	c.JSON(http.StatusOK, models.BFFUserResponse{Message: message})
 }

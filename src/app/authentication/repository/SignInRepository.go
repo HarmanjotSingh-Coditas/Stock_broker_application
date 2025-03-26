@@ -17,13 +17,13 @@ func NewUserSignInRepository(db *gorm.DB) *UserSignInRepository {
 }
 
 func (repo *UserSignInRepository) GetUserByEmail(email string) (*dbmodels.User, error) {
-	var user dbmodels.User
-	result := repo.DB.Where("email = ?", email).First(&user)
+	var bffUserSignInRequest dbmodels.User
+	result := repo.DB.Where("email = ?", email).First(&bffUserSignInRequest)
 
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return nil, errors.New(constants.ErrUserNotFound)
 	} else if result.Error != nil {
 		return nil, result.Error
 	}
-	return &user, nil
+	return &bffUserSignInRequest, nil
 }

@@ -47,7 +47,6 @@ func (controller *SignInController) SignInHandler(c *gin.Context) {
 		return
 	}
 
-	// Authenticate user
 	err := controller.service.SignIn(bffUserSignInRequest.EmailId, bffUserSignInRequest.Password)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, models.ErrorResponse{

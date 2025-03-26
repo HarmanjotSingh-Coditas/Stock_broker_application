@@ -11,12 +11,11 @@ import (
 
 func InitializeRoutes(router *gin.Engine, db *gorm.DB) {
 	signInRepo := repository.NewUserSignInRepository(db)
-	signUpRepo := repository.NewUserSignUpRepository(db)
-
 	signInService := business.NewSignInService(signInRepo)
-	signUpService := business.NewSignUpService(signUpRepo)
-
 	signInController := handlers.NewSignInController(signInService)
+
+	signUpRepo := repository.NewUserSignUpRepository(db)
+	signUpService := business.NewSignUpService(signUpRepo)
 	signUpController := handlers.NewSignUpController(signUpService)
 
 	router.POST("/Signup", signUpController.SignUpHandler)
