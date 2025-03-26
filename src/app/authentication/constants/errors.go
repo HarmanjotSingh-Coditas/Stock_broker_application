@@ -6,7 +6,7 @@ const (
 	ErrInvalidEmail        = "invalid email ID. It should be in the format abcdefg@doamin.com"
 	ErrInvalidPhone        = "invalid phone Number. It should be of 10 digits in the format 9876543210."
 	ErrInvalidPAN          = "invalid PAN format. It should be in the format ABCDE1234F."
-	ErrInvalidPassword     = "invalid password format. It should contain atleast one uppercae , one lowercase"
+	ErrInvalidPassword     = "invalid password format. It should contain atleast one uppercae , one lowercase and a special character"
 	ErrPasswordMismatch    = "password mismatched , password and confirmpassword must match"
 	ErrUserExists          = "user already exists"
 	ErrCreateUser          = "failed to create user"

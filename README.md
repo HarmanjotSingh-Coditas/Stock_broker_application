@@ -185,6 +185,16 @@ curl -X POST "http://localhost:8080/Signup" \
 ```
 
 ![image](https://github.com/user-attachments/assets/0a8779c2-ef42-4592-95d2-b8dab1af544b)
+![image](https://github.com/user-attachments/assets/28b50f7f-fb8f-4a50-9f52-af978fe081a9)
+![image](https://github.com/user-attachments/assets/9e852d69-8053-4f0c-bb5f-9557f7761496)
+![image](https://github.com/user-attachments/assets/d25b8114-71de-4a47-82c2-ee96beb13342)
+![image](https://github.com/user-attachments/assets/c7721ff0-c421-46f1-9700-dbae65417b91)
+![image](https://github.com/user-attachments/assets/9d2b987f-f060-485b-a608-ba784c8512e3)
+
+
+
+
+
 
 
 
