@@ -6,11 +6,11 @@ A backend service for user authentication and management in a stock broker platf
 
 ## 🚀 Features
 
-- **User Signup** with validations and hashed passwords
+- **User Signup & Sign-In** with validations and hashed passwords
 - **Data Validation** for email, phone number, PAN, and password
 - **Database Integration** using PostgreSQL and GORM
 - **Automated Migrations** handled in `sqlSetup.go`
-- **Error Handling** with detailed responses
+- **Error Handling** with structured responses
 
 ---
 
@@ -65,7 +65,7 @@ go run main.go
 
 ### 🔹 User Signup
 
-#### 📌 POST `/Signup`
+#### 📌 POST `/signup`
 Registers a new user with validation checks.
 
 #### 🔹 Request Body
@@ -89,15 +89,52 @@ Registers a new user with validation checks.
 }
 ```
 
-### ❌ Error Handling
-The application provides detailed validation errors. Example:
+---
+
+### 🔹 User Sign-In
+
+#### 📌 POST `/signin`
+Authenticates an existing user.
+
+#### 🔹 Request Body
 
 ```json
 {
-  "errors": [
-    "email is required",
-    "password must be at least 8 characters"
-  ]
+  "email": "johndoe@example.com",
+  "password": "Strong@123"
+}
+```
+
+#### 🔹 Response
+
+```json
+{
+  "message": "User has been logged in",
+}
+```
+
+---
+
+## ❌ Error Handling
+
+All errors now follow a **structured response format** with field-specific errors.
+
+### 🔹 Example Validation Error
+
+```json
+{
+  "errors": {
+    "email": "email is required",
+    "password": "password is required"
+  }
+}
+```
+
+### 🔹 Example Authentication Error
+
+```json
+{
+  "error": "Invalid credentials"
 }
 ```
 
@@ -115,11 +152,11 @@ The application provides detailed validation errors. Example:
 
 You can test the API using **Postman** or **cURL**.
 
-### 🔹 Test with Postman
+### 🔹 Test Signup with Postman
 
 1. Open Postman.
 2. Select a **POST** request.
-3. Enter the URL: `http://localhost:8080/Signup`
+3. Enter the URL: `http://localhost:8080/signup`
 4. Go to **Body → raw → JSON**.
 5. Paste the following:
 
@@ -143,33 +180,23 @@ You can test the API using **Postman** or **cURL**.
 }
 ```
 
-### 🔹 Test with cURL
+### 🔹 Test Sign-In with cURL
 
-✅ **Successful Request**
+✅ **Successful Login**
 
 ```sh
-curl -X POST "http://localhost:8080/Signup" \
--H "Content-Type: application/json" \
--d '{
-  "name": "Test User",
-  "password": "Test@1234",
-  "confirmpassword": "Test@1234",
+curl -X POST "http://localhost:8080/signin" -H "Content-Type: application/json" -d '{
   "email": "testuser@example.com",
-  "phoneno": 9876543211,
-  "pan": "XYZAB5678L"
+  "password": "Test@1234"
 }'
 ```
 
-❌ **Error Case (Missing Password)**
+❌ **Error Case (Wrong Password)**
 
 ```sh
-curl -X POST "http://localhost:8080/Signup" \
--H "Content-Type: application/json" \
--d '{
-  "name": "Test User",
+curl -X POST "http://localhost:8080/signin" -H "Content-Type: application/json" -d '{
   "email": "testuser@example.com",
-  "phoneno": 9876543211,
-  "pan": "XYZAB5678L"
+  "password": "WrongPass123"
 }'
 ```
 
@@ -177,11 +204,9 @@ curl -X POST "http://localhost:8080/Signup" \
 
 ```json
 {
-  "errors": [
-    "password is required",
-    "confirmpassword is required"
-  ]
+  "error": "Invalid credentials"
 }
+```
 ```
 
 ![image](https://github.com/user-attachments/assets/0a8779c2-ef42-4592-95d2-b8dab1af544b)
@@ -190,6 +215,17 @@ curl -X POST "http://localhost:8080/Signup" \
 ![image](https://github.com/user-attachments/assets/d25b8114-71de-4a47-82c2-ee96beb13342)
 ![image](https://github.com/user-attachments/assets/c7721ff0-c421-46f1-9700-dbae65417b91)
 ![image](https://github.com/user-attachments/assets/9d2b987f-f060-485b-a608-ba784c8512e3)
+![image](https://github.com/user-attachments/assets/4a5d3ec3-e344-41fc-8407-6836515a732c)
+![image](https://github.com/user-attachments/assets/4de11705-994e-44e3-88b5-a655a1a8f71a)
+![image](https://github.com/user-attachments/assets/a25c8278-0334-4567-83e3-59bcefa6cd19)
+![image](https://github.com/user-attachments/assets/004eda99-a181-4f9a-85bb-90b703d0b51a)
+![image](https://github.com/user-attachments/assets/85aa5235-020b-4333-8d79-96284eabcc38)
+![image](https://github.com/user-attachments/assets/d3c8ca8c-bf29-452e-89f5-e39be924ac75)
+
+
+
+
+
 
 
 
