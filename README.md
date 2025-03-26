@@ -207,7 +207,7 @@ curl -X POST "http://localhost:8080/signin" -H "Content-Type: application/json" 
   "error": "Invalid credentials"
 }
 ```
-```
+
 
 ![image](https://github.com/user-attachments/assets/0a8779c2-ef42-4592-95d2-b8dab1af544b)
 ![image](https://github.com/user-attachments/assets/28b50f7f-fb8f-4a50-9f52-af978fe081a9)
